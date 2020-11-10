@@ -28,7 +28,7 @@ function getApp(){
 
   function renderApp(app){
     // console.log(app.image_src)
-    const imgTag = document.querySelector(".card-img-top")
+    const imgTag = document.querySelector(".img-thumbnail")
     imgTag.src = app.image_src
 
     const hFive = document.querySelector(".card-title")
