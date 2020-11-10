@@ -9,6 +9,11 @@
     
 }
 
+h1{
+ font-family: 'Bubblegum Sans', cursive;
+ font-size: 15px;
+}
+
 .new-app-form{
     background-color: rgb(255, 255, 255);
     display: none;
@@ -48,7 +53,7 @@
 
 
 .bg-light {
-    background-color: #f39a14!important;
+    background-color: #ffab2d!important;
 }
 
 .btn-outline-success {
