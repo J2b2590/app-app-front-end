@@ -9,6 +9,28 @@ const appFormContainer = document.querySelector(".new-app-form")
 
 const card = document.querySelector(".card")
 
+function main(){
+    getApp()
+}
+
+function getApp(){
+    fetch("http://localhost:3000/appetizers")
+      .then(resp => resp.json())
+      .then(apps =>{
+        console.log(apps,"Call")
+        apps.forEach(app => renderApp(app))
+    })
+  }
+
+  function renderApp(app){
+    // console.log(app.image_src)
+    const imgTag = document.querySelector(".card-img-top")
+    imgTag.src = app.image_src
+
+    const hFive = document.querySelector(".card-title")
+    hFive.innerHTML = app.title
+}
+
 
 appAddBtn.addEventListener("click", () =>{
 
@@ -67,3 +89,5 @@ userFaveBtn.addEventListener("click", () =>{
 function fetchFavorites () {
     fetch(favoritesEndpoint)
 }
+
+main()
