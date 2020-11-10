@@ -6,7 +6,7 @@
     display: flex;
     justify-content: center;
     font-family: 'Baloo',display;
-    
+
 }
 
 h1{
@@ -20,7 +20,7 @@ h1{
     height: 40%;
     margin: 0 auto;
     width: 80%
-    
+
 }
 
 .card.flipped {
@@ -79,4 +79,11 @@ h1{
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
+.user-favs{
+  background-color: rgb(255, 255, 255);
+  display: none;
+  height: 40%;
+  margin: 0 auto;
+  width: 80%
 
+}
