@@ -37,10 +37,18 @@ h1{
   height: 100%;
 }
 
+.card:hover {
+  transform: scale(1.1, 1.1);
+}
+
+.card:hover::after {
+  opacity: 1;
+}
+
 .card-body {
   margin-top: 5px;
   border-radius: inherit;
-  background: antiquewhite;
+  background: #383838;;
   -ms-flex: 1 1 auto;
   flex: 1 1 auto;
   min-height: 1px;
@@ -49,7 +57,7 @@ h1{
 
 .img-thumbnail {
   padding: .25rem;
-  background-color: coral;
+  background-color: #383838;;
   border: 1px solid #dee2e6;
   border-radius: .25rem;
   max-width: 100%;
