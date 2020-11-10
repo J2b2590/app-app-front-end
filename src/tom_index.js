@@ -4,6 +4,10 @@ let userFavorites = false;
 let appetizersEndpoint = "http://localhost:3000/appetizers"
 let favoritesEndpoint = "http://localhost:3000/favorites"
 
+function ce(tag){
+    return document.createElement(tag)
+}
+
 const appAddBtn = document.querySelector("#new-app-id")
 const appFormContainer = document.querySelector(".new-app-form")
 
@@ -56,23 +60,6 @@ card.addEventListener("click", () =>{
     };
 });
 
-const userLoginBtn = document.querySelector("#user-favs-id")
-const userLoginForm = document.querySelector(".user-favs")
-userFaveBtn.addEventListener("click", () =>{
-
-    userFavorites = !userFavorites;
-
-    if(userFavorites){
-        userFaves.style.display = "block";
-    } else {
-        userFaves.style.display = "none"
-    };
-});
-
-function fetchFavorites () {
-    fetch(favoritesEndpoint)
-}
-
 const userFaveBtn = document.querySelector("#user-favs-id")
 const userFaves = document.querySelector(".user-favs")
 userFaveBtn.addEventListener("click", () =>{
@@ -88,6 +75,8 @@ userFaveBtn.addEventListener("click", () =>{
 
 function fetchFavorites () {
     fetch(favoritesEndpoint)
+    .then(resp => resp.json)
+    .then(faves => console.log(faves))
 }
 
 main()
