@@ -4,7 +4,25 @@ let newApp = false;
 const appAddBtn = document.querySelector("#new-app-id")
 const appFormContainer = document.querySelector(".new-app-form")
 
-const card = document.querySelector(".card")
+// const card = document.querySelector(".card")
+
+// const BASE_URL = "http://localhost:3000/appetizers"
+
+
+
+
+function main(){
+    getApp()
+}
+
+function getApp(){
+    fetch("http://localhost:3000/appetizers")
+      .then(resp => resp.json())
+      .then(apps =>{
+        console.log(apps,"Call")
+        apps.forEach(app => renderApp(app))
+    })
+  }
 
 
 appAddBtn.addEventListener("click", () =>{
@@ -18,15 +36,17 @@ appAddBtn.addEventListener("click", () =>{
     };
 });
 
-card.addEventListener("click", () =>{
 
-    console.log("click")
 
-    newApp = !newApp;
 
-    if(newApp){
-        card.classList.toggle("flipped")
-    } else {
-        console.log("help")
-    };
-});
+function renderApp(app){
+    // console.log(app.image_src)
+    const imgTag = document.querySelector(".card-img-top")
+    imgTag.src = app.image_src
+
+    const hFive = document.querySelector(".card-title")
+    hFive.innerHTML = app.title
+}
+
+
+main()
