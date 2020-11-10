@@ -1,5 +1,6 @@
 .container{
 
+  padding-top: 60px;
     margin-top: 100px;
     display: flex;
     justify-content: center;
@@ -21,41 +22,43 @@ h1{
     
 }
 
-.card.flipped {
-    -webkit-transform: rotateY( 180deg );
-    -moz-transform: rotateY( 180deg );
-    -o-transform: rotateY( 180deg );
-    transform: rotateY( 180deg );
-    display: none; 
-}
 
-.card{
+
+.card {
+  border-radius: 5px;
+  background: white;
+  padding: 5px 5px 1px 5px;
+  font-size: 14px;
+  list-style: none;
+  border-bottom: 1px solid #ccc;
+  min-height: 85px;
   cursor: pointer;
   width: 100%;
   height: 100%;
-  position: relative;
-  transition: transform 1s;
-  transform-style: preserve-3d;
-}
-.card-face{
-  height: 100%;
-  width: 100%;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
 }
 
-.front,.back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
+.card-body {
+  margin-top: 5px;
+  border-radius: inherit;
+  background: antiquewhite;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  min-height: 1px;
+  padding: 1.25rem;
 }
 
-  .back{
-    background: blue;
-    transform: rotateY(180deg);
-  }
+.img-thumbnail {
+  padding: .25rem;
+  background-color: coral;
+  border: 1px solid #dee2e6;
+  border-radius: .25rem;
+  max-width: 100%;
+  height: auto;
+}
+
+
+
+
 
 
 .bg-light {
@@ -76,8 +79,8 @@ h1{
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    /* background-color: transparent; */
-    /* border: 1px solid transparent;
+    background-color: transparent;
+    border: 1px solid transparent;
     padding: .375rem .75rem;
     font-size: 1rem;
     line-height: 1.5;
