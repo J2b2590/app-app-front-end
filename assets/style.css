@@ -1,5 +1,5 @@
 .container {
-  padding-top: 60px;
+  padding-top: 40px;
   margin-top: 100px;
   display: flex;
   justify-content: center;
@@ -16,10 +16,15 @@
   padding: 6px;
 }
 
+.title-head{
+  padding: 15px;
+  margin-top: -5%;
+}
+
 h1{
  font-family: ‘Bubblegum Sans’, cursive;
- font-size: 15px;
- color: white;
+ font-size: 30px;
+ color: orange;
 }
 
 .new-app-form {
