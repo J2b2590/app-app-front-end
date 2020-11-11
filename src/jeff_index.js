@@ -11,6 +11,9 @@ function main(){
     getApp()
 }
 
+
+
+
 function getApp(){
     fetch("http://localhost:3000/appetizers")
       .then(resp => resp.json())
@@ -33,6 +36,8 @@ appAddBtn.addEventListener("click", () =>{
 });
 
 
+
+
 function renderApp(app){
     // console.log(app.image_src)
     const lastDiv = document.createElement('div')
@@ -40,7 +45,7 @@ function renderApp(app){
     const notLastDiv = document.createElement('div')
     notLastDiv.className = "col"
     const firstDiv = document.createElement('div')
-    firstDiv.className = "card shadow p-3 mb-5 bg-white rounded flex-fill front"
+    firstDiv.className = "card shadow mb-5 bg-white rounded flex-fill front"
     firstDiv.style.width = "18rem"
     const imgTag = document.createElement("img")
     imgTag.className = "img-thumbnail"
