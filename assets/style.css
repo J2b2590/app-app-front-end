@@ -24,8 +24,6 @@ h1{
 
 }
 
-
-
 .card {
   border-radius: 5px;
   background: white;
@@ -64,6 +62,12 @@ h1{
   border-radius: .25rem;
   max-width: 100%;
   height: auto;
+}
+
+.arrows{
+  background-color: silver;
+  border-radius: 20px;
+  width: 12%;
 }
 
 

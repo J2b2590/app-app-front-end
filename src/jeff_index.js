@@ -9,8 +9,6 @@ const appFormContainer = document.querySelector(".new-app-form")
 // const BASE_URL = "http://localhost:3000/appetizers"
 
 
-
-
 function main(){
     getApp()
 }
@@ -36,7 +34,6 @@ appAddBtn.addEventListener("click", () =>{
     };
 });
 
-
 function renderApp(app){
     // console.log(app.image_src)
     const imgTag = document.querySelector(".img-thumbnail")
@@ -45,9 +42,5 @@ function renderApp(app){
     const hFive = document.querySelector(".card-title")
     hFive.innerHTML = app.title
 }
-
-
-
-
 
 main()
