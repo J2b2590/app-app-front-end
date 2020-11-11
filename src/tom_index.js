@@ -15,6 +15,7 @@ const card = document.querySelector(".card")
 
 function main(){
     getApp()
+    fetchFavorites()
 }
 
 function getApp(){
@@ -63,7 +64,6 @@ card.addEventListener("click", () =>{
 const userFaveBtn = document.querySelector("#user-favs-id")
 const userFaves = document.querySelector(".user-favs")
 userFaveBtn.addEventListener("click", () =>{
-
     userFavorites = !userFavorites;
 
     if(userFavorites){
@@ -76,7 +76,8 @@ userFaveBtn.addEventListener("click", () =>{
 function fetchFavorites () {
     fetch(favoritesEndpoint)
     .then(resp => resp.json)
-    .then(faves => console.log(faves))
+    .then(data => {console.log(data,"Call")
+    })
 }
 
 main()
