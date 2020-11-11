@@ -7,6 +7,10 @@
   color: white
 }
 
+.row{
+  display: inline-grid;
+}
+
 h1{
  font-family: ‘Bubblegum Sans’, cursive;
  font-size: 15px;
@@ -98,7 +102,7 @@ h1{
 .user-favs{
   background-color: rgb(255, 255, 255);
   display: none;
-  height: 40%;
+  height: 50px;
   margin: 0 auto;
   width: 80%
 }
