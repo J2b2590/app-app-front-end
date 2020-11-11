@@ -103,12 +103,22 @@ h1{
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
-.user-favs{
+.fave-card {
   background-color: rgb(255, 255, 255);
-  display: none;
+  display: block;
+  float: left;
   height: 50px;
-  margin: 0 auto;
-  width: 80%
+  margin: 10px;
+  width: 5%
+}
+
+.user-favs {
+  display: inline-flex
+}
+
+.fave-image {
+  max-height: 100px;
+  max-width: 100px;
 }
 
 
