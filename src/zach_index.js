@@ -1,10 +1,11 @@
 console.log("TESTING ZACH")
 let newApp = false;
-
+const appUrl = `http://localhost:3000/appetizers`
 const appAddBtn = document.querySelector("#new-app-id")
 const appFormContainer = document.querySelector(".new-app-form")
 const contFluid = document.getElementsByClassName("container-fluid")[0]
 
+const appForm = document.getElementById("form-form")
 // const card = document.querySelector(".card")
 
 // const BASE_URL = "http://localhost:3000/appetizers"
@@ -17,7 +18,7 @@ function main(){
 }
 
 function getApp(){
-    fetch("http://localhost:3000/appetizers")
+    fetch(appUrl)
       .then(resp => resp.json())
       .then(apps =>{
         console.log(apps,"Call")
@@ -105,7 +106,32 @@ function renderApp(app){
     contFluid.appendChild(lastDiv)
 }
 
-
+appForm.addEventListener("submit", (e) => {
+    e.preventDefault()
+    const appTitle = e.target.children[0].children[0].children[0].value
+    const appImage = e.target.children[0].children[1].children[0].value
+    e.target.reset()
+    
+    const formData = {
+        title: appTitle,
+        image_src: appImage,
+        rating: Math.floor(Math.random() * 200) + 1
+    }
+    const reqObj = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify(formData)
+    }
+    fetch(appUrl, reqObj)
+    .then(resp => resp.json())
+    .then(appetizer => {
+        renderApp(appetizer)
+    })
+    appFormContainer.style.display = "none"
+})
 
 
 
