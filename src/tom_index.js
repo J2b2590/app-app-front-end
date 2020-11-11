@@ -4,9 +4,6 @@ let userFavorites = false;
 let appetizersEndpoint = "http://localhost:3000/appetizers"
 let favoritesEndpoint = "http://localhost:3000/favorites"
 
-function ce(tag){
-    return document.createElement(tag)
-}
 
 const appAddBtn = document.querySelector("#new-app-id")
 const appFormContainer = document.querySelector(".new-app-form")
@@ -128,16 +125,26 @@ function fetchFavorites () {
 
 function renderFavorite (fave) {
     if(fave.favorites.length > 0){
-        const faveCard = ce("div")
-        const faveImg = ce("img")
-        const faveTitle = ce("h6")
+        const faveCard = document.createElement("div")
+        const faveImg = document.createElement("img")
+        const faveTitle = document.createElement("h6")
+        const removeFaveBtn = document.createElement("button")
 
         faveCard.setAttribute("class", "fave-card")
         faveImg.setAttribute("class", "fave-image")
         faveImg.src = fave.image_src
         faveTitle.innerText = fave.title
+        removeFaveBtn.setAttribute("data-id",`${fave.favorites[0].id}`)
+        removeFaveBtn.setAttribute("class","delete-btn")
+        removeFaveBtn.innerText = "Remove"
 
-        faveCard.append(faveImg, faveTitle)
+        removeFaveBtn.addEventListener("click", () => {
+            fetch(appetizersEndpoint+"/"+fave.favorites[0].id, {
+                method: "DELETE"
+            })
+        })
+
+        faveCard.append(faveImg, faveTitle, removeFaveBtn)
         userFaves.append(faveCard)
     }
 }
