@@ -172,9 +172,13 @@ function renderFavorite (fave) {
         removeFaveBtn.setAttribute("class","delete-btn")
         removeFaveBtn.innerText = "Remove"
 
-        removeFaveBtn.addEventListener("click", () => {
-            fetch(appetizersEndpoint+"/"+fave.favorites[0].id, {
+        removeFaveBtn.addEventListener("click", (e) => {
+            fetch(favoritesEndpoint+"/"+`${fave.favorites[0].id}`, {
                 method: "DELETE"
+            })
+            .then(resp => resp.json())
+            .then(app => {
+                faveCard.remove()
             })
         })
 
