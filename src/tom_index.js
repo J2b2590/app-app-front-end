@@ -1,17 +1,19 @@
 console.log("TESTING TOM")
 let newApp = false;
-let userFavorites = false;
+
 let appetizersEndpoint = "http://localhost:3000/appetizers"
 let favoritesEndpoint = "http://localhost:3000/favorites"
 
-
+const appForm = document.getElementById("form-form")
 const appAddBtn = document.querySelector("#new-app-id")
 const appFormContainer = document.querySelector(".new-app-form")
 const contFluid = document.getElementsByClassName("container-fluid")[0]
-
+const carouselInner = document.querySelector(".carousel-inner")
+const cardsDiv = document.createElement("div")
 
 function main(){
     getApp()
+    fetchFavorites()
 }
 
 function getApp(){
@@ -19,6 +21,7 @@ function getApp(){
       .then(resp => resp.json())
       .then(apps =>{
         // console.log(apps,"Call")
+        cardsDiv.innerHTML = ""
         apps.forEach(app => renderApp(app))
     })
   }
@@ -73,8 +76,64 @@ function getApp(){
     const p = document.createElement("p")
     p.innerText = `Likes: ${app.rating}`
 
+    /////////UP ARROW
+    const addUpArrow = document.createElement("button")
+    addUpArrow.setAttribute("class", "btn btn-primary")
+    addUpArrow.setAttribute("data-id", `${app.id}`)
+    addUpArrow.innerText = "↑"
+
+     addUpArrow.addEventListener("click", (e) => {
+        const updatedLikes = app.rating + 1
+        const formData = {
+            rating: updatedLikes
+        }
+        const reqObj = {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(formData)
+        }
+        fetch(appetizersEndpoint+"/"+app.id, reqObj)
+        .then(resp => resp.json())
+        .then(updatedApp => {
+             getApp()
+        })
+
+     })
+
+
+    /////////DOWN ARROW
+    const addDownArrow = document.createElement("button")
+    addDownArrow.setAttribute("class", "btn btn-info")
+    addDownArrow.setAttribute("data-id", `${app.id}`)
+    addDownArrow.innerText = "↓"
+
+    addDownArrow.addEventListener("click", (e) => {
+        const updatedLikes = app.rating - 1
+        const formData = {
+            rating: updatedLikes
+        }
+        const reqObj = {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(formData)
+        }
+        fetch(appetizersEndpoint+"/"+app.id, reqObj)
+        .then(resp => resp.json())
+        .then(updatedApp => {
+             getApp()
+        })
+
+    })
+
+    //////////// FAVE BUTTON & LISTENER
     const addFaveBtn = document.createElement("button")
-    addFaveBtn.setAttribute("class", "btn btn-outline-danger")
+    addFaveBtn.setAttribute("class", "btn btn-danger")
     addFaveBtn.setAttribute("data-id", `${app.id}`)
     addFaveBtn.innerText = "❤"
 
@@ -92,9 +151,12 @@ function getApp(){
             })
         }
         fetch(favoritesEndpoint, reqObj)
-        .then(resp => resp.json())
+        .then(resp => {
+            console.log(resp)
+            resp.json()
+        })
         .then(newFave => {
-            getApp()
+            console.log(newFave)
             fetchFavorites()
         })
     })
@@ -111,10 +173,13 @@ function getApp(){
     fifthDiv.appendChild(secondSvg)
     secondSvg.appendChild(secondPath)
     fourthDiv.appendChild(p)
+    fourthDiv.appendChild(addDownArrow)
     fourthDiv.appendChild(addFaveBtn)
+    fourthDiv.appendChild(addUpArrow)
     notLastDiv.appendChild(firstDiv)
     lastDiv.appendChild(notLastDiv)
-    contFluid.appendChild(lastDiv)
+    cardsDiv.appendChild(lastDiv)
+    contFluid.appendChild(cardsDiv)
 }
 
 appForm.addEventListener("submit", (e) => {
@@ -136,10 +201,10 @@ appForm.addEventListener("submit", (e) => {
         },
         body: JSON.stringify(formData)
     }
-    fetch(appUrl, reqObj)
+    fetch(appetizersEndpoint, reqObj)
     .then(resp => resp.json())
     .then(appetizer => {
-        renderApp(appetizer)
+        appetizer.errors ? window.alert("This appetizer is already in the database.") : getApp()
     })
     appFormContainer.style.display = "none"
 })
@@ -155,37 +220,30 @@ appAddBtn.addEventListener("click", () =>{
     };
 });
 
-const userFaveBtn = document.querySelector("#user-favs-id")
-const userFaves = document.querySelector(".user-favs")
-userFaveBtn.addEventListener("click", () =>{
-    userFavorites = !userFavorites;
-    fetchFavorites()
-    if(userFavorites){
-        userFaves.style.display = "block";
-    } else {
-        userFaves.style.display = "none"
-    };
-});
 
 function fetchFavorites () {
     fetch("http://localhost:3000/appetizers")
       .then(resp => resp.json())
       .then(faves =>{
-        userFaves.innerHTML = ""
+        carouselInner.innerHTML = ""
         faves.forEach(fave => renderFavorite(fave))
     })
 }
 
 function renderFavorite (fave) {
     if(fave.favorites.length > 0){
+        const activeCard = document.createElement("div")
         const faveCard = document.createElement("div")
         const faveImg = document.createElement("img")
-        const faveTitle = document.createElement("h6")
+        const cardCaption = document.createElement("div")
+        const faveTitle = document.createElement("p")
         const removeFaveBtn = document.createElement("button")
 
-        faveCard.setAttribute("class", "fave-card")
-        faveImg.setAttribute("class", "fave-image")
+        activeCard.setAttribute("class", "carousel-item active")
+        faveCard.setAttribute("class", "carousel-item")
+        faveImg.setAttribute("class", "d-block w-10")
         faveImg.src = fave.image_src
+        cardCaption.setAttribute("class", "carousel-caption d-none d-md-block")
         faveTitle.innerText = fave.title
         removeFaveBtn.setAttribute("data-id",`${fave.favorites[0].id}`)
         removeFaveBtn.setAttribute("id","delete-btn")
@@ -198,12 +256,22 @@ function renderFavorite (fave) {
             })
             .then(res => res.json())
             .then(deletedFave =>{
-                faveCard.remove()
+                // const cardToDelete = document.getElementsByClassName("carousel-item active")
+                // cardToDelete.remove()
+                fetchFavorites()
             })
         })
 
-        faveCard.append(faveImg, faveTitle, removeFaveBtn)
-        userFaves.append(faveCard)
+        cardCaption.append(faveTitle, removeFaveBtn)
+
+        if (carouselInner.children.length === 0) {
+            activeCard.append(faveImg, cardCaption)
+            carouselInner.append(activeCard)
+        } else {
+            faveCard.append(faveImg, cardCaption)
+            carouselInner.append(faveCard)
+        }
+
     }
 }
 

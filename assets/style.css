@@ -155,7 +155,11 @@ h1{
   position: relative;
 }
 
-
+.d-block {
+  width: 300px;
+  height: 300px;
+  margin: auto;
+}
 
 
 
