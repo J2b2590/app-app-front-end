@@ -5,6 +5,10 @@ const appAddBtn = document.querySelector("#new-app-id")
 const appFormContainer = document.querySelector(".new-app-form")
 const contFluid = document.getElementsByClassName("container-fluid")[0]
 
+
+
+
+
 const appForm = document.getElementById("form-form")
 let userFavorites = false;
 const appetizersEndpoint = "http://localhost:3000/appetizers"
@@ -14,39 +18,25 @@ const favoritesEndpoint = "http://localhost:3000/favorites"
 // const BASE_URL = "http://localhost:3000/appetizers"
 
 
-
 function main(){
     getApp()
 }
 
 function getApp(){
-    fetch(appUrl)
+    fetch("http://localhost:3000/appetizers")
       .then(resp => resp.json())
       .then(apps =>{
-        console.log(apps,"Call")
+        contFluid.innerHTML = ''
         apps.forEach(app => renderApp(app))
     })
   }
 
-
-appAddBtn.addEventListener("click", () =>{
-
-    newApp = !newApp;
-
-    if(newApp){
-        appFormContainer.style.display = "block";
-    } else {
-        appFormContainer.style.display = "none"
-    };
-});
-
-
-function renderApp(app){
+  function renderApp(app){
     // console.log(app.image_src)
     const lastDiv = document.createElement('div')
     lastDiv.className = "row"
     const notLastDiv = document.createElement('div')
-    notLastDiv.className = "col-sm-4"
+    notLastDiv.className = "col"
     const firstDiv = document.createElement('div')
     firstDiv.className = "card shadow p-3 mb-5 bg-white rounded flex-fill front"
     firstDiv.style.width = "18rem"
@@ -67,7 +57,7 @@ function renderApp(app){
     const firstSvg = document.createElement("SVG")
     firstSvg.style.width = "2em"
     firstSvg.style.height = "2em"
-    firstSvg.className = "bi bi-caret-up" 
+    firstSvg.className = "bi bi-caret-up"
     firstSvg.viewBox = "0 0 16 16"
     firstSvg.setAttribute("fill", "currentColor")
     firstSvg.setAttribute("xmlns", "http://www.w3.org/2000/svg")
@@ -79,19 +69,104 @@ function renderApp(app){
     const secondSvg = document.createElement("SVG")
     secondSvg.style.width = "2em"
     secondSvg.style.height = "2em"
-    secondSvg.className = "bi bi-caret-down" 
+    secondSvg.className = "bi bi-caret-down"
     secondSvg.viewBox = "0 0 16 16"
     secondSvg.setAttribute("fill", "currentColor")
     secondSvg.setAttribute("xmlns", "http://www.w3.org/2000/svg")
-    
+
     const secondPath = document.createElement("path")
     secondPath.setAttribute("d", "M3.204 5L8 10.481 12.796 5H3.204zm-.753.659l4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z")
     secondPath.setAttribute("fill-rule", "evenodd")
 
     const p = document.createElement("p")
-    p.innerText = `Likes: ${app.rating}`
+    let appLikes = app.rating
+    p.innerText = `Likes: ${appLikes}`
 
-   
+    //////////LIKE BUTTON
+    const addFaveBtn = document.createElement("button")
+    addFaveBtn.setAttribute("class", "btn btn-danger")
+    addFaveBtn.setAttribute("data-id", `${app.id}`)
+    addFaveBtn.innerText = "❤"
+
+    /////////UP ARROW
+    const addUpArrow = document.createElement("button")
+    addUpArrow.setAttribute("class", "btn btn-primary")
+    addUpArrow.setAttribute("data-id", `${app.id}`)
+    addUpArrow.innerText = "↑"
+
+    addUpArrow.addEventListener("click", (e) => {
+        const updatedLikes = app.rating + 1
+        const formData = {
+            rating: updatedLikes
+        }
+        const reqObj = {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(formData)
+        }
+        fetch(appUrl+"/"+app.id, reqObj)
+        .then(resp => resp.json())
+        .then(updatedApp => { 
+             getApp()
+        })
+            
+    })
+
+
+    /////////DOWN ARROW
+    const addDownArrow = document.createElement("button")
+    addDownArrow.setAttribute("class", "btn btn-info")
+    addDownArrow.setAttribute("data-id", `${app.id}`)
+    addDownArrow.innerText = "↓"
+
+    addDownArrow.addEventListener("click", (e) => {
+        const updatedLikes = app.rating - 1
+        const formData = {
+            rating: updatedLikes
+        }
+        const reqObj = {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(formData)
+        }
+        fetch(appUrl+"/"+app.id, reqObj)
+        .then(resp => resp.json())
+        .then(updatedApp => { 
+             getApp()
+        })
+            
+    })
+
+
+
+    addFaveBtn.addEventListener("click", (e) => {
+        const appID = parseInt(e.target.dataset.id)
+        const reqObj = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                user_id: 1,
+                appetizer_id: appID
+            })
+        }
+        fetch(favoritesEndpoint, reqObj)
+        .then(resp => resp.json())
+        .then(newFave => {
+            getApp()
+            fetchFavorites()
+        })
+    })
+
+
     firstDiv.appendChild(imgTag)
     firstDiv.appendChild(secondDiv)
     secondDiv.appendChild(thirdDiv)
@@ -103,6 +178,12 @@ function renderApp(app){
     fifthDiv.appendChild(secondSvg)
     secondSvg.appendChild(secondPath)
     fourthDiv.appendChild(p)
+
+    fourthDiv.appendChild(addFaveBtn)
+    fourthDiv.appendChild(addUpArrow)
+    fourthDiv.appendChild(addDownArrow)
+
+
     notLastDiv.appendChild(firstDiv)
     lastDiv.appendChild(notLastDiv)
     contFluid.appendChild(lastDiv)
@@ -113,7 +194,7 @@ appForm.addEventListener("submit", (e) => {
     const appTitle = e.target.children[0].children[0].children[0].value
     const appImage = e.target.children[0].children[1].children[0].value
     e.target.reset()
-    
+
     const formData = {
         title: appTitle,
         image_src: appImage,
@@ -134,6 +215,17 @@ appForm.addEventListener("submit", (e) => {
     })
     appFormContainer.style.display = "none"
 })
+
+appAddBtn.addEventListener("click", () =>{
+
+    newApp = !newApp;
+
+    if(newApp){
+        appFormContainer.style.display = "block";
+    } else {
+        appFormContainer.style.display = "none"
+    };
+});
 
 const userFaveBtn = document.querySelector("#user-favs-id")
 const userFaves = document.querySelector(".user-favs")
@@ -168,15 +260,16 @@ function renderFavorite (fave) {
         faveImg.src = fave.image_src
         faveTitle.innerText = fave.title
         removeFaveBtn.setAttribute("data-id",`${fave.favorites[0].id}`)
-        removeFaveBtn.setAttribute("class","delete-btn")
-        removeFaveBtn.innerText = "Remove"
+        removeFaveBtn.setAttribute("id","delete-btn")
+        removeFaveBtn.setAttribute("class","btn btn-danger")
+        removeFaveBtn.innerText = "X"
 
-        removeFaveBtn.addEventListener("click", (e) => {
-            fetch(favoritesEndpoint+"/"+`${fave.favorites[0].id}`, {
+        removeFaveBtn.addEventListener("click", () => {
+            fetch(favoritesEndpoint+"/"+fave.favorites[0].id, {
                 method: "DELETE"
             })
-            .then(resp => resp.json())
-            .then(app => {
+            .then(res => res.json())
+            .then(deletedFave =>{
                 faveCard.remove()
             })
         })
@@ -185,5 +278,18 @@ function renderFavorite (fave) {
         userFaves.append(faveCard)
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 main()
