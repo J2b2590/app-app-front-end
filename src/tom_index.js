@@ -93,10 +93,13 @@ function getApp(){
             })
         }
         fetch(favoritesEndpoint, reqObj)
-        .then(resp => resp.json())
+        .then(resp => {
+            console.log(resp)
+            resp.json()
+        })
         .then(newFave => {
             console.log(newFave)
-            renderFavorite(newFave)
+            fetchFavorites()
         })
     })
 
@@ -137,10 +140,10 @@ appForm.addEventListener("submit", (e) => {
         },
         body: JSON.stringify(formData)
     }
-    fetch(appUrl, reqObj)
+    fetch(appetizersEndpoint, reqObj)
     .then(resp => resp.json())
     .then(appetizer => {
-        renderApp(appetizer)
+        getApp()
     })
     appFormContainer.style.display = "none"
 })
