@@ -6,6 +6,9 @@ const appFormContainer = document.querySelector(".new-app-form")
 const contFluid = document.getElementsByClassName("container-fluid")[0]
 
 const appForm = document.getElementById("form-form")
+let userFavorites = false;
+const appetizersEndpoint = "http://localhost:3000/appetizers"
+const favoritesEndpoint = "http://localhost:3000/favorites"
 // const card = document.querySelector(".card")
 
 // const BASE_URL = "http://localhost:3000/appetizers"
@@ -132,6 +135,51 @@ appForm.addEventListener("submit", (e) => {
     appFormContainer.style.display = "none"
 })
 
+const userFaveBtn = document.querySelector("#user-favs-id")
+const userFaves = document.querySelector(".user-favs")
+userFaveBtn.addEventListener("click", () =>{
+    userFavorites = !userFavorites;
+    fetchFavorites()
+    if(userFavorites){
+        userFaves.style.display = "block";
+    } else {
+        userFaves.style.display = "none"
+    };
+});
 
+function fetchFavorites () {
+    fetch("http://localhost:3000/appetizers")
+      .then(resp => resp.json())
+      .then(faves =>{
+        userFaves.innerHTML = ""
+        faves.forEach(fave => renderFavorite(fave))
+    })
+}
+
+function renderFavorite (fave) {
+    if(fave.favorites.length > 0){
+        const faveCard = document.createElement("div")
+        const faveImg = document.createElement("img")
+        const faveTitle = document.createElement("h6")
+        const removeFaveBtn = document.createElement("button")
+
+        faveCard.setAttribute("class", "fave-card")
+        faveImg.setAttribute("class", "fave-image")
+        faveImg.src = fave.image_src
+        faveTitle.innerText = fave.title
+        removeFaveBtn.setAttribute("data-id",`${fave.favorites[0].id}`)
+        removeFaveBtn.setAttribute("class","delete-btn")
+        removeFaveBtn.innerText = "Remove"
+
+        removeFaveBtn.addEventListener("click", () => {
+            fetch(appetizersEndpoint+"/"+fave.favorites[0].id, {
+                method: "DELETE"
+            })
+        })
+
+        faveCard.append(faveImg, faveTitle, removeFaveBtn)
+        userFaves.append(faveCard)
+    }
+}
 
 main()
