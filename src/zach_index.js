@@ -15,7 +15,6 @@ const favoritesEndpoint = "http://localhost:3000/favorites"
 
 
 
-
 function main(){
     getApp()
 }
