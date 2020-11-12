@@ -18,7 +18,7 @@
 
 .title-head{
   padding: 15px;
-  margin-top: -5%;
+
 }
 
 h1{
@@ -134,6 +134,26 @@ h1{
   max-width: 100px;
 }
 
+/* .carousel .item {
+  height: 500px;
+}
+
+.item img {
+    position: absolute;
+    object-fit:cover;
+    top: 0;
+    left: 0;
+    min-height: 500px;
+} */
+
+.carousel {
+  background-color: antiquewhite;
+  width: 20%;
+  margin: auto;
+  margin-top: -10%;
+  text-align: center;
+  position: relative;
+}
 
 
 
