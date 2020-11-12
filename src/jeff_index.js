@@ -1,20 +1,22 @@
-console.log("TESTING TOM")
+console.log("TESTING ZACH")
 let newApp = false;
-let userFavorites = false;
-let appetizersEndpoint = "http://localhost:3000/appetizers"
-let favoritesEndpoint = "http://localhost:3000/favorites"
-
-
+const appUrl = `http://localhost:3000/appetizers`
 const appAddBtn = document.querySelector("#new-app-id")
 const appFormContainer = document.querySelector(".new-app-form")
 const contFluid = document.getElementsByClassName("container-fluid")[0]
+
+const appForm = document.getElementById("form-form")
+let userFavorites = false;
+const appetizersEndpoint = "http://localhost:3000/appetizers"
+const favoritesEndpoint = "http://localhost:3000/favorites"
+// const card = document.querySelector(".card")
+
+// const BASE_URL = "http://localhost:3000/appetizers"
 
 
 function main(){
     getApp()
 }
-
-
 
 function getApp(){
     fetch("http://localhost:3000/appetizers")
@@ -48,30 +50,17 @@ function getApp(){
     const h5 = document.createElement('h5')
     h5.className = "card-title"
     h5.innerText = `${app.title}`
-    ///upArrow img
-    let upArrow = document.createElement("img");
-    upArrow.src = "./assets/up.png";
-    upArrow.className = "arrowImg"
-    ///downArrow img
-    let downArrow = document.createElement("img");
-    downArrow.src = "./assets/down.png";
-    downArrow.className = "arrowImg"
-    ////heart img
-    let heartImg = document.createElement("img");
-    heartImg.src = "./assets/heart.png"
-    heartImg.className = "heartImg"
+    const firstSvg = document.createElement("SVG")
+    firstSvg.style.width = "2em"
+    firstSvg.style.height = "2em"
+    firstSvg.className = "bi bi-caret-up"
+    firstSvg.viewBox = "0 0 16 16"
+    firstSvg.setAttribute("fill", "currentColor")
+    firstSvg.setAttribute("xmlns", "http://www.w3.org/2000/svg")
 
-    // const firstSvg = document.createElement("SVG")
-    // firstSvg.style.width = "2em"
-    // firstSvg.style.height = "2em"
-    // firstSvg.className = "bi bi-caret-up"
-    // firstSvg.viewBox = "0 0 16 16"
-    // firstSvg.setAttribute("fill", "currentColor")
-    // firstSvg.setAttribute("xmlns", "http://www.w3.org/2000/svg")
-
-    // const firstPath = document.createElement("path")
-    // firstPath.setAttribute("d", "M3.204 11L8 5.519 12.796 11H3.204zm-.753-.659l4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z")
-    // firstPath.setAttribute("fill-rule", "evenodd")
+    const firstPath = document.createElement("path")
+    firstPath.setAttribute("d", "M3.204 11L8 5.519 12.796 11H3.204zm-.753-.659l4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z")
+    firstPath.setAttribute("fill-rule", "evenodd")
 
     const secondSvg = document.createElement("SVG")
     secondSvg.style.width = "2em"
@@ -88,6 +77,32 @@ function getApp(){
     const p = document.createElement("p")
     p.innerText = `Likes: ${app.rating}`
 
+    const addFaveBtn = document.createElement("button")
+    addFaveBtn.setAttribute("class", "btn btn-outline-danger")
+    addFaveBtn.setAttribute("data-id", `${app.id}`)
+    addFaveBtn.innerText = "❤"
+
+    addFaveBtn.addEventListener("click", (e) => {
+        const appID = parseInt(e.target.dataset.id)
+        const reqObj = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                user_id: 1,
+                appetizer_id: appID
+            })
+        }
+        fetch(favoritesEndpoint, reqObj)
+        .then(resp => resp.json())
+        .then(newFave => {
+            getApp()
+            fetchFavorites()
+        })
+    })
+
 
     firstDiv.appendChild(imgTag)
     firstDiv.appendChild(secondDiv)
@@ -95,18 +110,43 @@ function getApp(){
     thirdDiv.appendChild(fourthDiv)
     fourthDiv.appendChild(h5)
     fourthDiv.appendChild(fifthDiv)
-    fifthDiv.appendChild(upArrow)
-    fifthDiv.appendChild(downArrow)
-    fifthDiv.appendChild(heartImg)
-    // firstSvg.appendChild(firstPath)
+    fifthDiv.appendChild(firstSvg)
+    firstSvg.appendChild(firstPath)
     fifthDiv.appendChild(secondSvg)
     secondSvg.appendChild(secondPath)
     fourthDiv.appendChild(p)
+    fourthDiv.appendChild(addFaveBtn)
     notLastDiv.appendChild(firstDiv)
     lastDiv.appendChild(notLastDiv)
     contFluid.appendChild(lastDiv)
 }
 
+appForm.addEventListener("submit", (e) => {
+    e.preventDefault()
+    const appTitle = e.target.children[0].children[0].children[0].value
+    const appImage = e.target.children[0].children[1].children[0].value
+    e.target.reset()
+
+    const formData = {
+        title: appTitle,
+        image_src: appImage,
+        rating: Math.floor(Math.random() * 200) + 1
+    }
+    const reqObj = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify(formData)
+    }
+    fetch(appUrl, reqObj)
+    .then(resp => resp.json())
+    .then(appetizer => {
+        renderApp(appetizer)
+    })
+    appFormContainer.style.display = "none"
+})
 
 appAddBtn.addEventListener("click", () =>{
 
@@ -152,12 +192,17 @@ function renderFavorite (fave) {
         faveImg.src = fave.image_src
         faveTitle.innerText = fave.title
         removeFaveBtn.setAttribute("data-id",`${fave.favorites[0].id}`)
-        removeFaveBtn.setAttribute("class","delete-btn")
-        removeFaveBtn.innerText = "Remove"
+        removeFaveBtn.setAttribute("id","delete-btn")
+        removeFaveBtn.setAttribute("class","btn btn-danger")
+        removeFaveBtn.innerText = "X"
 
         removeFaveBtn.addEventListener("click", () => {
-            fetch(appetizersEndpoint+"/"+fave.favorites[0].id, {
+            fetch(favoritesEndpoint+"/"+fave.favorites[0].id, {
                 method: "DELETE"
+            })
+            .then(res => res.json())
+            .then(deletedFave =>{
+                faveCard.remove()
             })
         })
 
