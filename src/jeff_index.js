@@ -93,7 +93,7 @@ function getApp(){
     const addDownArrow = document.createElement("button")
     addDownArrow.setAttribute("class", "btn btn-info")
     addDownArrow.setAttribute("data-id", `${app.id}`)
-    addDownArrow.innerText = "↓"
+    addDownArrow.innerText = "↓ "
 
     addFaveBtn.addEventListener("click", (e) => {
         const appID = parseInt(e.target.dataset.id)
