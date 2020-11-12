@@ -1,6 +1,6 @@
 console.log("TESTING TOM")
 let newApp = false;
-let userFavorites = false;
+
 let appetizersEndpoint = "http://localhost:3000/appetizers"
 let favoritesEndpoint = "http://localhost:3000/favorites"
 
@@ -9,6 +9,7 @@ const appAddBtn = document.querySelector("#new-app-id")
 const appFormContainer = document.querySelector(".new-app-form")
 const contFluid = document.getElementsByClassName("container-fluid")[0]
 const carouselInner = document.querySelector(".carousel-inner")
+const cardsDiv = document.createElement("div")
 
 function main(){
     getApp()
@@ -20,6 +21,7 @@ function getApp(){
       .then(resp => resp.json())
       .then(apps =>{
         // console.log(apps,"Call")
+        cardsDiv.innerHTML = ""
         apps.forEach(app => renderApp(app))
     })
   }
@@ -74,8 +76,64 @@ function getApp(){
     const p = document.createElement("p")
     p.innerText = `Likes: ${app.rating}`
 
+    /////////UP ARROW
+    const addUpArrow = document.createElement("button")
+    addUpArrow.setAttribute("class", "btn btn-primary")
+    addUpArrow.setAttribute("data-id", `${app.id}`)
+    addUpArrow.innerText = "↑"
+
+     addUpArrow.addEventListener("click", (e) => {
+        const updatedLikes = app.rating + 1
+        const formData = {
+            rating: updatedLikes
+        }
+        const reqObj = {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(formData)
+        }
+        fetch(appetizersEndpoint+"/"+app.id, reqObj)
+        .then(resp => resp.json())
+        .then(updatedApp => {
+             getApp()
+        })
+
+     })
+
+
+    /////////DOWN ARROW
+    const addDownArrow = document.createElement("button")
+    addDownArrow.setAttribute("class", "btn btn-info")
+    addDownArrow.setAttribute("data-id", `${app.id}`)
+    addDownArrow.innerText = "↓"
+
+    addDownArrow.addEventListener("click", (e) => {
+        const updatedLikes = app.rating - 1
+        const formData = {
+            rating: updatedLikes
+        }
+        const reqObj = {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(formData)
+        }
+        fetch(appetizersEndpoint+"/"+app.id, reqObj)
+        .then(resp => resp.json())
+        .then(updatedApp => {
+             getApp()
+        })
+
+    })
+
+    //////////// FAVE BUTTON & LISTENER
     const addFaveBtn = document.createElement("button")
-    addFaveBtn.setAttribute("class", "btn btn-outline-danger")
+    addFaveBtn.setAttribute("class", "btn btn-danger")
     addFaveBtn.setAttribute("data-id", `${app.id}`)
     addFaveBtn.innerText = "❤"
 
@@ -115,10 +173,13 @@ function getApp(){
     fifthDiv.appendChild(secondSvg)
     secondSvg.appendChild(secondPath)
     fourthDiv.appendChild(p)
+    fourthDiv.appendChild(addDownArrow)
     fourthDiv.appendChild(addFaveBtn)
+    fourthDiv.appendChild(addUpArrow)
     notLastDiv.appendChild(firstDiv)
     lastDiv.appendChild(notLastDiv)
-    contFluid.appendChild(lastDiv)
+    cardsDiv.appendChild(lastDiv)
+    contFluid.appendChild(cardsDiv)
 }
 
 appForm.addEventListener("submit", (e) => {
@@ -143,7 +204,7 @@ appForm.addEventListener("submit", (e) => {
     fetch(appetizersEndpoint, reqObj)
     .then(resp => resp.json())
     .then(appetizer => {
-        getApp()
+        appetizer.errors ? window.alert("This appetizer is already in the database.") : getApp()
     })
     appFormContainer.style.display = "none"
 })
@@ -159,17 +220,6 @@ appAddBtn.addEventListener("click", () =>{
     };
 });
 
-const userFaveBtn = document.querySelector("#user-favs-id")
-const userFaves = document.querySelector(".user-favs")
-userFaveBtn.addEventListener("click", () =>{
-    userFavorites = !userFavorites;
-    fetchFavorites()
-    if(userFavorites){
-        userFaves.style.display = "block";
-    } else {
-        userFaves.style.display = "none"
-    };
-});
 
 function fetchFavorites () {
     fetch("http://localhost:3000/appetizers")
