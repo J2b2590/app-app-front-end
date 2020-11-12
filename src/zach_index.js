@@ -12,7 +12,6 @@ const appForm = document.getElementById("form-form")
 
 
 
-
 function main(){
     getApp()
 }

@@ -81,6 +81,13 @@ h1{
   width: 12%;
 }
 
+.arrowImg{
+  width: 20px;
+}
+.heartImg{
+  width: 20px;
+}
+
 .bg-light {
     background-color: #004274!important;
 }
