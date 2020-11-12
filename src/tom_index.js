@@ -95,8 +95,8 @@ function getApp(){
         fetch(favoritesEndpoint, reqObj)
         .then(resp => resp.json())
         .then(newFave => {
-            getApp()
-            fetchFavorites()
+            console.log(newFave)
+            renderFavorite(newFave)
         })
     })
 
@@ -203,7 +203,9 @@ function renderFavorite (fave) {
             })
             .then(res => res.json())
             .then(deletedFave =>{
-                activeCard.remove()
+                // const cardToDelete = document.getElementsByClassName("carousel-item active")
+                // cardToDelete.remove()
+                fetchFavorites()
             })
         })
 

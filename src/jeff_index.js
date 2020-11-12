@@ -77,10 +77,23 @@ function getApp(){
     const p = document.createElement("p")
     p.innerText = `Likes: ${app.rating}`
 
+    //////////LIKE BUTTON
     const addFaveBtn = document.createElement("button")
-    addFaveBtn.setAttribute("class", "btn btn-outline-danger")
+    addFaveBtn.setAttribute("class", "btn btn-danger")
     addFaveBtn.setAttribute("data-id", `${app.id}`)
     addFaveBtn.innerText = "❤"
+
+    /////////UP ARROW
+    const addUpArrow = document.createElement("button")
+    addUpArrow.setAttribute("class", "btn btn-primary")
+    addUpArrow.setAttribute("data-id", `${app.id}`)
+    addUpArrow.innerText = "↑"
+
+    /////////DOWN ARROW
+    const addDownArrow = document.createElement("button")
+    addDownArrow.setAttribute("class", "btn btn-info")
+    addDownArrow.setAttribute("data-id", `${app.id}`)
+    addDownArrow.innerText = "↓"
 
     addFaveBtn.addEventListener("click", (e) => {
         const appID = parseInt(e.target.dataset.id)
@@ -115,7 +128,12 @@ function getApp(){
     fifthDiv.appendChild(secondSvg)
     secondSvg.appendChild(secondPath)
     fourthDiv.appendChild(p)
+
     fourthDiv.appendChild(addFaveBtn)
+    fourthDiv.appendChild(addUpArrow)
+    fourthDiv.appendChild(addDownArrow)
+
+
     notLastDiv.appendChild(firstDiv)
     lastDiv.appendChild(notLastDiv)
     contFluid.appendChild(lastDiv)
