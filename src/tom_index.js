@@ -4,14 +4,15 @@ let userFavorites = false;
 let appetizersEndpoint = "http://localhost:3000/appetizers"
 let favoritesEndpoint = "http://localhost:3000/favorites"
 
-
+const appForm = document.getElementById("form-form")
 const appAddBtn = document.querySelector("#new-app-id")
 const appFormContainer = document.querySelector(".new-app-form")
 const contFluid = document.getElementsByClassName("container-fluid")[0]
-
+const carouselInner = document.querySelector(".carousel-inner")
 
 function main(){
     getApp()
+    fetchFavorites()
 }
 
 function getApp(){
@@ -171,21 +172,25 @@ function fetchFavorites () {
     fetch("http://localhost:3000/appetizers")
       .then(resp => resp.json())
       .then(faves =>{
-        userFaves.innerHTML = ""
+        carouselInner.innerHTML = ""
         faves.forEach(fave => renderFavorite(fave))
     })
 }
 
 function renderFavorite (fave) {
     if(fave.favorites.length > 0){
+        const activeCard = document.createElement("div")
         const faveCard = document.createElement("div")
         const faveImg = document.createElement("img")
-        const faveTitle = document.createElement("h6")
+        const cardCaption = document.createElement("div")
+        const faveTitle = document.createElement("p")
         const removeFaveBtn = document.createElement("button")
 
-        faveCard.setAttribute("class", "fave-card")
-        faveImg.setAttribute("class", "fave-image")
+        activeCard.setAttribute("class", "carousel-item active")
+        faveCard.setAttribute("class", "carousel-item")
+        faveImg.setAttribute("class", "d-block w-10")
         faveImg.src = fave.image_src
+        cardCaption.setAttribute("class", "carousel-caption d-none d-md-block")
         faveTitle.innerText = fave.title
         removeFaveBtn.setAttribute("data-id",`${fave.favorites[0].id}`)
         removeFaveBtn.setAttribute("id","delete-btn")
@@ -198,12 +203,20 @@ function renderFavorite (fave) {
             })
             .then(res => res.json())
             .then(deletedFave =>{
-                faveCard.remove()
+                activeCard.remove()
             })
         })
 
-        faveCard.append(faveImg, faveTitle, removeFaveBtn)
-        userFaves.append(faveCard)
+        cardCaption.append(faveTitle, removeFaveBtn)
+
+        if (carouselInner.children.length === 0) {
+            activeCard.append(faveImg, cardCaption)
+            carouselInner.append(activeCard)
+        } else {
+            faveCard.append(faveImg, cardCaption)
+            carouselInner.append(faveCard)
+        }
+
     }
 }
 
