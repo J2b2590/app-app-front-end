@@ -73,6 +73,32 @@ function getApp(){
     const p = document.createElement("p")
     p.innerText = `Likes: ${app.rating}`
 
+    const addFaveBtn = document.createElement("button")
+    addFaveBtn.setAttribute("class", "add-fave-btn")
+    addFaveBtn.setAttribute("data-id", `${app.id}`)
+    addFaveBtn.innerText = "Add to favorites"
+
+    addFaveBtn.addEventListener("click", (e) => {
+        const appID = parseInt(e.target.dataset.id)
+        const reqObj = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                user_id: 1,
+                appetizer_id: appID
+            })
+        }
+        fetch(favoritesEndpoint, reqObj)
+        .then(resp => resp.json())
+        .then(newFave => {
+            getApp()
+            fetchFavorites()
+        })
+    })
+
 
     firstDiv.appendChild(imgTag)
     firstDiv.appendChild(secondDiv)
@@ -85,6 +111,7 @@ function getApp(){
     fifthDiv.appendChild(secondSvg)
     secondSvg.appendChild(secondPath)
     fourthDiv.appendChild(p)
+    fourthDiv.appendChild(addFaveBtn)
     notLastDiv.appendChild(firstDiv)
     lastDiv.appendChild(notLastDiv)
     contFluid.appendChild(lastDiv)
@@ -139,8 +166,12 @@ function renderFavorite (fave) {
         removeFaveBtn.innerText = "Remove"
 
         removeFaveBtn.addEventListener("click", () => {
-            fetch(appetizersEndpoint+"/"+fave.favorites[0].id, {
+            fetch(favoritesEndpoint+"/"+fave.favorites[0].id, {
                 method: "DELETE"
+            })
+            .then(res => res.json())
+            .then(deletedFave =>{
+                faveCard.remove()
             })
         })
 
