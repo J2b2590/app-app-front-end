@@ -170,7 +170,12 @@ h1{
   margin: auto;
 }
 
-
+.card-footer {
+  padding: .75rem 1.25rem;
+  background-color: #383838;
+  border-top: 1px solid rgba(0,0,0,.125);
+  border-radius: 5px;
+}
 
 
 
