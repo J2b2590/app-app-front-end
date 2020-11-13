@@ -78,6 +78,9 @@ function getApp(){
 
     /////////UP ARROW
     const addUpArrow = document.createElement("button")
+    const upArrowBreak = document.createElement("br")
+    const upArrowBreak2 = document.createElement("br")
+    const upArrowBreak3 = document.createElement("br")
     addUpArrow.setAttribute("class", "btn btn-primary")
     addUpArrow.setAttribute("data-id", `${app.id}`)
     addUpArrow.innerText = "↑"
@@ -161,6 +164,29 @@ function getApp(){
         })
     })
 
+    ////////DELETE APP BUTTON
+    const deleteAppBtn = document.createElement("button")
+
+    deleteAppBtn.setAttribute("data-id",`${app.id}`)
+    deleteAppBtn.setAttribute("id","app-delete-btn")
+    deleteAppBtn.setAttribute("class","btn btn-danger")
+    deleteAppBtn.innerText = "X"
+
+    deleteAppBtn.addEventListener("click", () => {
+        debugger
+        fetch(appetizersEndpoint+"/"+`${app.id}`, {
+                method: "DELETE"
+        })
+        .then(res => res.json())
+        .then(deletedApp =>{
+        // const cardToDelete = document.getElementsByClassName("carousel-item active")
+        // cardToDelete.remove()
+        getApp()
+        })
+    })
+
+    const cardFooter = document.createElement("div")
+    cardFooter.setAttribute("class", "card-footer")
 
     firstDiv.appendChild(imgTag)
     firstDiv.appendChild(secondDiv)
@@ -176,6 +202,11 @@ function getApp(){
     fourthDiv.appendChild(addDownArrow)
     fourthDiv.appendChild(addFaveBtn)
     fourthDiv.appendChild(addUpArrow)
+    // fourthDiv.appendChild(upArrowBreak)
+    // fourthDiv.appendChild(upArrowBreak2)
+    // fourthDiv.appendChild(upArrowBreak3)
+    firstDiv.appendChild(cardFooter)
+    cardFooter.appendChild(deleteAppBtn)
     notLastDiv.appendChild(firstDiv)
     lastDiv.appendChild(notLastDiv)
     cardsDiv.appendChild(lastDiv)

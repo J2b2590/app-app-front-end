@@ -1,8 +1,21 @@
 
 
 body{
-  background-color: rgba(51, 170, 232, .1);
-  font-family: "Lineto Brown Sub","Lineto Brown Light Sub",Verdana,sans-serif!important;
+  background-color: rgba(238, 246, 244, .1);
+  font-family: 'Amaranth', sans-serif;
+}
+
+.AppIcon{
+  margin-left: 46%;
+  padding: 3px;
+  text-align: center;
+}
+
+.AppFont{
+  margin-top: 25%;
+  float: right;
+  font-size: 20px;
+  color: darkgray;
 }
 
 
@@ -37,7 +50,6 @@ h1{
 }
 
 .new-app-form {
-    background-color: rgb(255, 255, 255);
     display: none;
     margin: 0 auto;
     width: 80%;

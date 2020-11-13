@@ -173,7 +173,6 @@ function getApp(){
     deleteAppBtn.innerText = "X"
 
     deleteAppBtn.addEventListener("click", () => {
-        debugger
         fetch(appetizersEndpoint+"/"+`${app.id}`, {
                 method: "DELETE"
         })
