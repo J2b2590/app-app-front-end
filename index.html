@@ -6,12 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Amaranth&family=Lato&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="./assets/style.css" />
-    <!-- <script src="./src/jeff_index.js"  defer ></script> -->
+    <script src="./src/jeff_index.js"  defer ></script>
     <!-- <script src="./src/zach_index.js"  defer ></script> -->
-    <script src="./src/tom_index.js"  defer ></script>
+    <!-- <script src="./src/tom_index.js"  defer ></script> -->
     <!-- add app, favorite apps, search app -->
 
     <title>APP APP</title>
@@ -19,8 +20,11 @@
   <body>
       <!-- //////////// /NAV BAR //////////////////////// -->
     <nav class="navbar navbar-light bg-light">
-      <img src="./assets/appLogo.svg" width="50" height="60">
-        <h1 class="navbar-brand">APP APP</h1>
+
+      <div class="AppIcon">
+        <img  src="./assets/appLogo.svg" width="50" height="60">
+        <p class="AppFont">ppApp</p>
+    </div>
         <button id="new-app-id" type="button" class="btn btn-danger">Add New App</button>
       </nav>
 
@@ -29,7 +33,7 @@
 
 
 
-<!-- THIS IS THE NEW APP FORM///////////////////////////// -->
+<!-- Carousel///////////////////////////// -->
     <div class="container">
       <div class="container-fluid">
 
@@ -51,7 +55,7 @@
             <span class="sr-only">Next</span>
           </a>
         </div>
-
+<!-- NEW APP FORM////////////////////////////// -->
         <div class="title-head">
           <h1>Welcome to AppApp, make a list of your favorite Apps</h1>
         </div>
@@ -67,7 +71,7 @@
                   <input type="text" class="form-control" placeholder="Image url">
                 </div>
                 <div class="col">
-                  <input type="submit" name="submit" value="Create New App" class="submit">
+                  <input type="submit" name="submit" value="Create New App" class="submit btn btn-danger">
                 </div>
               </div>
             </form>
